@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MyApp" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <meta name="description" content="Powerful PWA - Works on iPhone & iPad like a native app" />
+
+  <!-- PWA Manifest inline -->
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTXlBcHAiLCJzaG9ydF9uYW1lIjoiTXlBcHAiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBhMGEwZiIsInRoZW1lX2NvbG9yIjoiIzAwZjVmZiIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnJTIweG1sbnMlM0QnaHR0cCUzQSUyRiUyRnd3dy53My5vcmclMkYyMDAwJTJGc3ZnJyUyMHZpZXdCb3glM0QnMCUyMDAlMjAxOTIlMjAxOTInJTNFJTNDcmVjdCUyMHdpZHRoJTNEJzE5MiclMjBoZWlnaHQlM0QnMTkyJyUyMGZpbGwlM0QnJTIzMGEwYTBmJyUyMHJ4JTNEJzMyJyUyMCUyRiUzRSUzQ3RleHQlMjB4JTNEJzUwJTI1JyUyMHklM0QnNTUlMjUnJTIwZG9taW5hbnQtYmFzZWxpbmUlM0QnbWlkZGxlJyUyMHRleHQtYW5jaG9yJTNEJ21pZGRsZSclMjBmb250LXNpemUlM0QnMTAwJyUzRSUyNyUyNiUyMzEyODUxNCUzQiUzQyUyRnRleHQlM0UlM0MlMkZzdmclM0UiLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=" />
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%230a0a0f' rx='40'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='90'>🚀</text></svg>" />
+
+  <title>MyApp — iPhone & iPad Ready</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a26;
+      --accent: #00f5ff;
+      --accent2: #7c3aed;
+      --accent3: #f59e0b;
+      --text: #f0f0ff;
+      --text-muted: #8888aa;
+      --border: rgba(0, 245, 255, 0.12);
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --radius: 20px;
+      --font-ui: 'Syne', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      height: -webkit-fill-available;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overflow-x: hidden;
+      padding-top: var(--safe-top);
+      padding-bottom: calc(var(--safe-bottom) + 70px);
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      animation: orb-drift 12s ease-in-out infinite;
+    }
+    .bg-orb-1 { width: 400px; height: 400px; background: rgba(124,58,237,0.15); top: -100px; right: -100px; }
+    .bg-orb-2 { width: 300px; height: 300px; background: rgba(0,245,255,0.1); bottom: 100px; left: -80px; animation-delay: -6s; }
+
+    @keyframes orb-drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.05); }
+      66% { transform: translate(-20px, 30px) scale(0.95); }
+    }
+
+    /* ─── HEADER ─── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 3px 8px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      animation: pulse-border 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,245,255,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(0,245,255,0); }
+    }
+
+    /* ─── MAIN SCROLL ─── */
+    .main {
+      position: relative;
+      z-index: 1;
+      padding: 24px 16px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ─── INSTALL BANNER ─── */
+    .install-banner {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(0,245,255,0.1));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 24px;
+      animation: slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .install-banner.visible { display: flex; }
+
+    .install-icon { font-size: 28px; flex-shrink: 0; }
+
+    .install-text { flex: 1; }
+    .install-text strong { display: block; font-size: 14px; font-weight: 700; color: var(--text); }
+    .install-text span { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+    .install-btn {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.15s, opacity 0.15s;
+      -webkit-appearance: none;
+    }
+
+    .install-btn:active { transform: scale(0.95); opacity: 0.8; }
+
+    /* ─── HERO CARD ─── */
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      animation: slide-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,245,255,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 7vw, 42px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .status-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .status-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,245,255,0.08);
+      border: 1px solid rgba(0,245,255,0.15);
+      border-radius: 30px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ─── FEATURE GRID ─── */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      margin-top: 28px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 16px;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s;
+      animation: slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .feature-card:nth-child(1) { animation-delay: 0.1s; }
+    .feature-card:nth-child(2) { animation-delay: 0.15s; }
+    .feature-card:nth-child(3) { animation-delay: 0.2s; }
+    .feature-card:nth-child(4) { animation-delay: 0.25s; }
+
+    .feature-card:active { transform: scale(0.95); border-color: var(--accent); }
+
+    .feature-icon { font-size: 28px; margin-bottom: 10px; }
+    .feature-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .feature-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+    /* ─── STATS ROW ─── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 12px;
+      text-align: center;
+      animation: slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent3), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── ACTION CARD ─── */
+    .action-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+      animation: slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .app-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-family: var(--font-ui);
+      font-size: 15px;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s;
+    }
+
+    .app-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,245,255,0.1);
+    }
+
+    .app-input::placeholder { color: var(--text-muted); }
+
+    .action-btn {
+      background: linear-gradient(135deg, var(--accent2), #5b21b6);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+      -webkit-appearance: none;
+      white-space: nowrap;
+    }
+
+    .action-btn:active { transform: scale(0.95); opacity: 0.85; }
+
+    .toggle-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .toggle-item:last-child { border-bottom: none; }
+
+    .toggle-label { font-size: 14px; font-weight: 600; }
+    .toggle-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .toggle {
+      position: relative;
+      width: 44px; height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--surface2);
+      border-radius: 30px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .toggle input:checked + .toggle-track { background: var(--accent2); border-color: var(--accent2); }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      left: 3px; top: 50%;
+      transform: translateY(-50%);
+      width: 18px; height: 18px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .toggle input:checked + .toggle-track::after { transform: translateY(-50%) translateX(18px); }
+
+    /* ─── PWA GUIDE ─── */
+    .guide-card {
+      background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(0,245,255,0.06));
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 20px;
+      animation: slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+    }
+
+    .guide-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .guide-steps { display: flex; flex-direction: column; gap: 10px; }
+
+    .guide-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .step-num {
+      width: 24px; height: 24px;
+      border-radius: 8px;
+      background: var(--accent2);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .step-text strong { color: var(--text); }
+
+    /* ─── BOTTOM NAV ─── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: rgba(17, 17, 24, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid var(--border);
+      padding: 10px 0 calc(10px + var(--safe-bottom));
+    }
+
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px 20px;
+      border-radius: 12px;
+      transition: color 0.15s, transform 0.15s;
+      -webkit-appearance: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .nav-btn.active { color: var(--accent); }
+    .nav-btn:active { transform: scale(0.9); }
+
+    .nav-icon { font-size: 22px; line-height: 1; }
+    .nav-label { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed;
+      top: calc(70px + var(--safe-top));
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: rgba(30, 30, 45, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─── TABS CONTENT ─── */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes slide-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { display: none; }
+
+    /* ─── IPAD SPECIFIC ─── */
+    @media (min-width: 768px) {
+      .main { padding: 32px 24px; max-width: 760px; }
+      .feature-grid { grid-template-columns: repeat(4, 1fr); }
+      .hero-title { font-size: 52px; }
+    }
+
+    @media (min-width: 1024px) {
+      .main { max-width: 900px; }
+    }
+
+    /* ─── DARK MODE ALWAYS ON ─── */
+    @media (prefers-color-scheme: light) {
+      :root { --bg: #0a0a0f; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">⚡ MyApp</div>
+    <div class="header-badge">LIVE</div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- INSTALL BANNER (shows on mobile if not installed) -->
+    <div class="install-banner" id="installBanner">
+      <div class="install-icon">📲</div>
+      <div class="install-text">
+        <strong>Home Screen par Add karo</strong>
+        <span>Native app jaise experience pao</span>
+      </div>
+      <button class="install-btn" onclick="handleInstall()">Install</button>
+    </div>
+
+    <!-- TAB: HOME -->
+    <div class="tab-content active" id="tab-home">
+
+      <!-- HERO -->
+      <div class="hero-card">
+        <div class="hero-eyebrow">// PROGRESSIVE WEB APP</div>
+        <h1 class="hero-title">Mobile Ka<br /><span>Next Level.</span></h1>
+        <p class="hero-desc">Yeh app iPhone, iPad aur Android sab par ek jaisi chalti hai. Install karo Home Screen par — bilkul native app ki tarah!</p>
+        <div class="status-row">
+          <div class="status-chip"><div class="status-dot"></div>PWA Ready</div>
+          <div class="status-chip"><div class="status-dot"></div>Offline Works</div>
+          <div class="status-chip"><div class="status-dot"></div>Fast</div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="section-label">// Performance</div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-val">100</div>
+          <div class="stat-label">Speed Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">0ms</div>
+          <div class="stat-label">Load Time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">✓ A2HS</div>
+          <div class="stat-label">Installable</div>
+        </div>
+      </div>
+
+      <!-- FEATURES -->
+      <div class="section-label">// Features</div>
+      <div class="feature-grid">
+        <div class="feature-card" onclick="showToast('📴 Offline mode active!')">
+          <div class="feature-icon">📴</div>
+          <div class="feature-name">Offline Mode</div>
+          <div class="feature-desc">Internet ke bina bhi kaam kare</div>
+        </div>
+        <div class="feature-card" onclick="showToast('🔔 Notifications enabled!')">
+          <div class="feature-icon">🔔</div>
+          <div class="feature-name">Push Alerts</div>
+          <div class="feature-desc">Real-time notifications</div>
+        </div>
+        <div class="feature-card" onclick="showToast('📷 Camera ready!')">
+          <div class="feature-icon">📷</div>
+          <div class="feature-name">Camera Access</div>
+          <div class="feature-desc">Device camera use karo</div>
+        </div>
+        <div class="feature-card" onclick="showToast('📍 Location found!')">
+          <div class="feature-icon">📍</div>
+          <div class="feature-name">GPS Location</div>
+          <div class="feature-desc">Live location tracking</div>
+        </div>
+      </div>
+
+      <!-- PWA INSTALL GUIDE -->
+      <div class="guide-card">
+        <div class="guide-title">📱 iPhone/iPad par Kaise Install Karo?</div>
+        <div class="guide-steps">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Safari</strong> mein yeh page kholo (Chrome ya Firefox nahi)</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Neeche <strong>Share button</strong> (⬆️ icon) tap karo</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>"Add to Home Screen"</strong> select karo</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text"><strong>Add</strong> press karo — app install ho jayegi! 🎉</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB: TOOLS -->
+    <div class="tab-content" id="tab-tools">
+      <div class="section-label">// Quick Tools</div>
+
+      <div class="action-card">
+        <div class="feature-name" style="margin-bottom:14px; font-size:16px;">🔍 Search Anything</div>
+        <div class="input-group">
+          <input class="app-input" type="text" placeholder="Kuch bhi search karo..." id="searchInput" />
+          <button class="action-btn" onclick="doSearch()">Go</button>
+        </div>
+        <div id="searchResult" style="font-size:13px; color:var(--text-muted); min-height:20px;"></div>
+      </div>
+
+      <div class="action-card">
+        <div class="feature-name" style="margin-bottom:14px; font-size:16px;">⚙️ Settings</div>
+        <div class="toggle-row">
+          <div class="toggle-item">
+            <div>
+              <div class="toggle-label">Dark Mode</div>
+              <div class="toggle-sub">Aankhon ke liye better</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked onchange="showToast('🌙 Dark mode!')"><span class="toggle-track"></span></label>
+          </div>
+          <div class="toggle-item">
+            <div>
+              <div class="toggle-label">Notifications</div>
+              <div class="toggle-sub">Push alerts allow karo</div>
+            </div>
+            <label class="toggle"><input type="checkbox" onchange="requestNotif(this)"><span class="toggle-track"></span></label>
+          </div>
+          <div class="toggle-item">
+            <div>
+              <div class="toggle-label">Haptic Feedback</div>
+              <div class="toggle-sub">Vibration on tap</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked onchange="showToast('📳 Haptic updated!')"><span class="toggle-track"></span></label>
+          </div>
+          <div class="toggle-item">
+            <div>
+              <div class="toggle-label">Offline Cache</div>
+              <div class="toggle-sub">Data save karo locally</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked onchange="showToast('💾 Cache setting saved!')"><span class="toggle-track"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: INFO -->
+    <div class="tab-content" id="tab-info">
+      <div class="section-label">// Device Info</div>
+      <div class="action-card" id="deviceInfo" style="font-family:var(--font-mono); font-size:12px; line-height:2; color:var(--text-muted);"></div>
+      <div class="section-label">// About PWA</div>
+      <div class="action-card">
+        <p style="font-size:14px; line-height:1.7; color:var(--text-muted);">
+          <strong style="color:var(--text)">PWA (Progressive Web App)</strong> ek aisi technology hai jo website ko native app jaisi banati hai.<br><br>
+          ✅ <strong style="color:var(--accent)">Koi App Store nahi</strong> — direct install<br>
+          ✅ <strong style="color:var(--accent)">Automatic Updates</strong> — hamesha latest<br>
+          ✅ <strong style="color:var(--accent)">Offline Support</strong> — Service Worker se<br>
+          ✅ <strong style="color:var(--accent)">Fast</strong> — Cache se instant load<br>
+          ✅ <strong style="color:var(--accent)">Secure</strong> — HTTPS required
+        </p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-home" onclick="switchTab('home')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-btn" id="nav-tools" onclick="switchTab('tools')">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-label">Tools</span>
+    </button>
+    <button class="nav-btn" id="nav-info" onclick="switchTab('info')">
+      <span class="nav-icon">ℹ️</span>
+      <span class="nav-label">Info</span>
+    </button>
+  </nav>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- SERVICE WORKER + PWA LOGIC -->
+  <script>
+    // ─── TAB SWITCHING ───
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('nav-' + tab).classList.add('active');
+      if (tab === 'info') loadDeviceInfo();
+    }
+
+    // ─── TOAST ───
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // ─── SEARCH ───
+    function doSearch() {
+      const val = document.getElementById('searchInput').value.trim();
+      const res = document.getElementById('searchResult');
+      if (!val) { res.textContent = '⚠️ Kuch likho pehle!'; return; }
+      res.textContent = `🔍 Searching: "${val}" ...`;
+      setTimeout(() => {
+        res.innerHTML = `✅ Found results for <strong style="color:var(--accent)">"${val}"</strong> — tap to open`;
+        showToast('🔍 Search complete!');
+      }, 800);
+    }
+
+    // ─── NOTIFICATIONS ───
+    function requestNotif(el) {
+      if (el.checked && 'Notification' in window) {
+        Notification.requestPermission().then(p => {
+          if (p === 'granted') showToast('🔔 Notifications ON!');
+          else { showToast('❌ Permission denied'); el.checked = false; }
+        });
+      } else showToast('🔕 Notifications OFF');
+    }
+
+    // ─── DEVICE INFO ───
+    function loadDeviceInfo() {
+      const el = document.getElementById('deviceInfo');
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      const info = [
+        `📱 Platform:    ${navigator.platform || 'Unknown'}`,
+        `🌐 Browser:     ${navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome') ? 'Safari' : navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Other'}`,
+        `📺 Screen:      ${screen.width} × ${screen.height}`,
+        `🔋 Battery:     ${navigator.getBattery ? 'Supported' : 'N/A'}`,
+        `📡 Online:      ${navigator.onLine ? '✅ Yes' : '❌ No'}`,
+        `🖥️ PWA Mode:    ${isStandalone ? '✅ Installed!' : '❌ Browser tab'}`,
+        `💾 Storage:     ${navigator.storage ? 'Supported' : 'N/A'}`,
+        `🕐 Time:        ${new Date().toLocaleTimeString('ur-PK')}`,
+      ];
+      el.innerHTML = info.map(l => `<div style="display:flex;gap:8px">${l}</div>`).join('');
+    }
+
+    // ─── PWA INSTALL ───
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBanner').classList.add('visible');
+    });
+
+    async function handleInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        if (result.outcome === 'accepted') showToast('🎉 App Install ho rahi hai!');
+        deferredPrompt = null;
+        document.getElementById('installBanner').classList.remove('visible');
+      } else {
+        showToast('📲 Safari > Share > Add to Home Screen');
+      }
+    }
+
+    window.addEventListener('appinstalled', () => {
+      showToast('🎉 App successfully install ho gayi!');
+      document.getElementById('installBanner').classList.remove('visible');
+    });
+
+    // ─── iOS INSTALL HINT ───
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const isInStandalone = window.navigator.standalone;
+    if (isIOS && !isInStandalone) {
+      setTimeout(() => {
+        document.getElementById('installBanner').classList.add('visible');
+      }, 1500);
+    }
+
+    // ─── SERVICE WORKER ───
+    const SW_CODE = `
+const CACHE = 'myapp-v1';
+const ASSETS = ['/'];
+
+self.addEventListener('install', e => {
+  self.skipWaiting();
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(() => {})));
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    ).then(() => clients.claim())
+  );
+});
+
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(
+    fetch(e.request).catch(() => caches.match(e.request))
+  );
+});
+    `;
+
+    if ('serviceWorker' in navigator) {
+      const blob = new Blob([SW_CODE], { type: 'application/javascript' });
+      const swURL = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swURL, { scope: '/' })
+        .then(() => console.log('✅ SW registered'))
+        .catch(err => console.log('SW error:', err));
+    }
+
+    // ─── ONLINE / OFFLINE ───
+    window.addEventListener('offline', () => showToast('📴 Offline mode — cached data use ho raha hai'));
+    window.addEventListener('online', () => showToast('✅ Wapas Online!'));
+
+    // ─── BATTERY API ───
+    if (navigator.getBattery) {
+      navigator.getBattery().then(b => {
+        if (b.level < 0.2) showToast(`🔋 Battery low: ${Math.round(b.level * 100)}%`);
+      });
+    }
+
+    // ─── TOUCH FEEDBACK ───
+    document.querySelectorAll('.feature-card, .action-btn, .install-btn').forEach(el => {
+      el.addEventListener('touchstart', () => {
+        if (navigator.vibrate) navigator.vibrate(10);
+      }, { passive: true });
+    });
+
+    // ─── INITIAL TOAST ───
+    setTimeout(() => showToast('⚡ App load hogayi!'), 600);
+  </script>
+</body>
+</html>
