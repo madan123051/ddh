@@ -593,6 +593,8 @@ async function doConnect() {
       body: JSON.stringify({password: pw}),
     });
     const data = await res.json();
+    
+    alert(JSON.stringify(data));
 
     if (data.ok) {
       HOST = host;
