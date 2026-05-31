@@ -591,7 +591,6 @@ async function doConnect() {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({password: pw}),
-      signal: AbortSignal.timeout(6000)
     });
     const data = await res.json();
 
@@ -650,7 +649,6 @@ function startStream() {
     try {
       const res = await fetch(`${HOST}/screen?q=${highQuality?80:40}`, {
         headers:{'X-Token': TOKEN},
-        signal: AbortSignal.timeout(5000)
       });
       const data = await res.json();
       if (data.img) {
@@ -690,7 +688,6 @@ async function api(path, body={}) {
       method:'POST',
       headers:{'Content-Type':'application/json','X-Token':TOKEN},
       body:JSON.stringify(body),
-      signal:AbortSignal.timeout(3000)
     });
   } catch(e){}
 }
